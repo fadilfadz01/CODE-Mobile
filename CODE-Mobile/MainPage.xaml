@@ -1,0 +1,25 @@
+﻿<Page
+    x:Class="CODE_Mobile.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CODE_Mobile"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*" MaxHeight="300"/>
+            <RowDefinition Height="auto" MinHeight="50"/>
+        </Grid.RowDefinitions>
+        <TextBox Name="ConsoleBox" Margin="5" AcceptsReturn="True" IsSpellCheckEnabled="False"/>
+        <Border Grid.Row="1" BorderBrush="{ThemeResource TextBoxDisabledBorderThemeBrush}" BorderThickness="2" Margin="5" Background="Black">
+            <ScrollViewer Name="OutputScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <TextBlock Name="OutputBox" Foreground="White" Padding="5,0,0,100" IsTextSelectionEnabled="True"/>
+            </ScrollViewer>
+        </Border>
+        <Button Grid.Row="2" Name="RunBtn" Content="Run" HorizontalAlignment="Center" Width="100" Click="RunBtn_Click" IsEnabled="False"/>
+    </Grid>
+</Page>
