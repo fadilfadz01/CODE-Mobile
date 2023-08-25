@@ -32,19 +32,11 @@ namespace CODE_Mobile
         TelnetClient tClient = new TelnetClient(TimeSpan.FromSeconds(1), cancellationTokenSource.Token);
         StorageFolder localFolder = ApplicationData.Current.LocalFolder;
 
-
         public MainPage()
         {
             this.InitializeComponent();
-            ConsoleBox.Text = @"using System;
-
-public class Program
-{
-    public static void Main()
-    {
-        Console.WriteLine(""Hello World!"");
-    }
-}";
+            ConsoleBox.Text = "using System;\n\npublic class Program\n{\n    public static void Main()\n    {\n        Console.WriteLine(\"Hello World!\");\n    }\n}";
+            Initialize();
             Connect();
         }
 
@@ -66,33 +58,44 @@ public class Program
             }
         }
 
+        private async void Initialize()
+        {
+            await localFolder.CreateFileAsync("Result.txt", CreationCollisionOption.ReplaceExisting);
+        }
+
         private async void RunBtn_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 RunBtn.IsEnabled = false;
-                OutputScroll.ChangeView(0.0f, OutputScroll.ScrollableHeight, 1.0f);
-                OutputBox.Text += "Running...\n";
-                var cSharpFile = await localFolder.CreateFileAsync("Program.cs", CreationCollisionOption.ReplaceExisting);
+                StorageFile cSharpFile = await localFolder.CreateFileAsync("Program.cs", CreationCollisionOption.ReplaceExisting);
+                StorageFile resultFile = await localFolder.GetFileAsync("Result.txt");
                 await FileIO.WriteTextAsync(cSharpFile, ConsoleBox.Text);
-                File.Delete($"{localFolder.Path}\\Result.txt");
-                await tClient.Send($"{Package.Current.Installed­Location.Path}\\C#DE-Mobile.bat \"{cSharpFile.Path}\" >\"{localFolder.Path}\\Result.txt\"");
-                string Output = string.Empty;
-                while (!Output.Contains("Excecuted successfully.") && !Output.Contains("Excecuted unsuccessfully."))
+                await tClient.Send($"{Package.Current.Installed­Location.Path}\\C#DE-Mobile.bat \"{cSharpFile.Path}\" >>\"{resultFile.Path}\"");
+                var temp = string.Empty;
+                while (true)
                 {
                     await Task.Delay(200);
-                    if (File.Exists($"{localFolder.Path}\\Result.txt")) Output = await FileIO.ReadTextAsync(await localFolder.GetFileAsync("Result.txt"));
+                    var output = await FileIO.ReadTextAsync(resultFile);
+                    if (temp != output)
+                    {
+                        temp = output;
+                        OutputScroll.ChangeView(0.0f, OutputScroll.ScrollableHeight, 1.0f);
+                        OutputBox.Text = output;
+                    }
+                    var result = output.Split('\n')[output.Split('\n').Length - 2];
+                    if (result.Contains("Excecuted successfully.") || result.Contains("Excecuted unsuccessfully."))
+                    {
+                        break;
+                    }
                 }
-                OutputBox.Text += Output + "\n";
-                OutputScroll.ChangeView(0.0f, OutputScroll.ScrollableHeight, 1.0f);
-                RunBtn.IsEnabled = true;
             }
             catch (Exception ex)
             {
                 OutputBox.Text += "Excecuted unsuccessfully.\n\n";
-                RunBtn.IsEnabled = true;
                 _ = new MessageDialog(ex.Message + "\n" + ex.StackTrace).ShowAsync();
             }
+            RunBtn.IsEnabled = true;
         }
     }
 }

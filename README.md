@@ -15,4 +15,4 @@ CheckNetIsolation.exe LoopbackExempt -a -n=CODE-Mobile_kqyng60eng17c
 
 
 ### Screenshots
-<img src="https://github.com/fadilfadz01/CODE-Mobile/assets/66063294/b2cdcad1-2638-4636-ad26-9e4cc5994243" alt="Drawing" style="width: 240px;"/>
+<img src="Images/C%23DE-Mobile.png" alt="Drawing" style="width: 240px;"/>

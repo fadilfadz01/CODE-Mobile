@@ -17,7 +17,7 @@
         <TextBox Name="ConsoleBox" Margin="5" AcceptsReturn="True" IsSpellCheckEnabled="False"/>
         <Border Grid.Row="1" BorderBrush="{ThemeResource TextBoxDisabledBorderThemeBrush}" BorderThickness="2" Margin="5" Background="Black">
             <ScrollViewer Name="OutputScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                <TextBlock Name="OutputBox" Foreground="White" Padding="5,0,0,100" IsTextSelectionEnabled="True"/>
+                <TextBlock Name="OutputBox" Foreground="White" Padding="5,0,0,80" IsTextSelectionEnabled="True"/>
             </ScrollViewer>
         </Border>
         <Button Grid.Row="2" Name="RunBtn" Content="Run" HorizontalAlignment="Center" Width="100" Click="RunBtn_Click" IsEnabled="False"/>
